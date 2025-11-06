@@ -1,0 +1,18 @@
+# Kopo Kopo API Configuration
+# Copy this file to .env and fill in your actual credentials
+# Get these from https://app.kopokopo.com/
+
+# Use sandbox.kopokopo.com for testing
+K2_BASE_URL=sandbox.kopokopo.com
+
+# Your Kopo Kopo API credentials
+K2_CLIENT_ID=your_client_id_here
+K2_CLIENT_SECRET=your_client_secret_here
+K2_API_KEY=your_api_key_here
+
+# Your M-Pesa Till Number
+K2_TILL_NUMBER=K000000
+
+# Webhook callback URL (use ngrok or webhook.site for testing)
+K2_CALLBACK_URL=https://webhook.site/your-unique-id
+
