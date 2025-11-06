@@ -140,9 +140,9 @@ class PaymentViewModel extends BaseViewModel {
 
   Future<void> _showSuccessDialog() async {
     await _dialogService.showDialog(
-      title: '🎉 Payment Initiated!',
+      title: '🎉 Payment Successful!',
       description:
-          'Your payment request has been sent. Please check your phone to complete the M-Pesa transaction.',
+          'Your payment has been completed successfully! You can view this transaction in the Payment History section.',
     );
     _navigationService.back();
   }

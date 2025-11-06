@@ -139,6 +139,10 @@ class KopokopoService {
       debugPrint(
           'Customer: ${paymentRequest.firstName} ${paymentRequest.lastName}');
 
+      // Generate a unique payment ID for tracking
+      final paymentId = 'ui_${DateTime.now().millisecondsSinceEpoch}';
+      final initiationTime = DateTime.now();
+
       // Build metadata with a maximum of 5 key-value pairs
       // Start with the essential fixed keys
       final Map<String, dynamic> metadata = {
@@ -171,12 +175,40 @@ class KopokopoService {
         ),
         callbackUrl: AppConfig.k2CallbackUrl,
         metadata: metadata,
-        onSuccess: () {
+        onSuccess: () async {
           debugPrint('✅ Payment with UI successful');
+          
+          // Create and store payment record
+          final paymentRecord = PaymentRecord(
+            id: paymentId,
+            locationUrl: 'N/A', // UI method doesn't expose location URL
+            paymentRequest: paymentRequest,
+            status: PaymentStatus.success,
+            createdAt: initiationTime,
+            transactionReference: 'UI-${DateTime.now().millisecondsSinceEpoch}',
+          );
+          
+          await _storePaymentRecord(paymentRecord);
+          debugPrint('💾 Payment record saved to history');
+          
           onSuccess();
         },
-        onError: (error) {
+        onError: (error) async {
           debugPrint('❌ Payment with UI failed: $error');
+          
+          // Store failed payment record for history
+          final paymentRecord = PaymentRecord(
+            id: paymentId,
+            locationUrl: 'N/A',
+            paymentRequest: paymentRequest,
+            status: PaymentStatus.failed,
+            createdAt: initiationTime,
+            errorMessage: error,
+          );
+          
+          await _storePaymentRecord(paymentRecord);
+          debugPrint('💾 Failed payment record saved to history');
+          
           onError(error);
         },
         accessToken: accessToken,
